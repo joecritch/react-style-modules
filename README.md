@@ -1,4 +1,4 @@
-# React Style Modules
+# React Style Modules — WIP
 
 **React Style Modules is a prototyped demonstration and *work-in-progress* library for resolving an element's style within a React component.**
 
