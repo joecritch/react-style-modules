@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>React Style Modules</title>
+</head>
+<body>
+
+	<style>
+	/*  Basic reset for prototype */
+	* {
+		-webkit-box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+		font-family: sans-serif;
+	}
+	</style>
+
+	<div id="app-container">
+			
+
+	</div>
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
+	<script src="http://fb.me/react-with-addons-0.10.0.js"></script>
+	<script src="createStyleModule.js"></script>
+
+	<script>
+
+	var spacing = 40;
+
+	var Grid = createStyleModule({
+		child: {
+			'Inner': {
+				marginLeft: 0 - spacing,
+				marginTop: 0 - spacing,
+				children: {
+					'Item': {
+						paddingTop: spacing,
+						paddingLeft: spacing,
+						display: 'inline-block',
+						verticalAlign: 'top'
+
+					}
+				}
+			}
+		}
+	});
+
+	var Block = createStyleModule({
+		position: 'relative',
+		child: {
+			'Note': {
+				position: 'absolute',
+				left: 20,
+				bottom: 0
+			}
+		}
+	});
+
+	var NewsItem = createStyleModule({
+		node: 'section',
+		child: {
+			'Image': {
+				node: 'img',
+				width: '100%',
+				height: 'auto'
+			},
+			'Summary': uses(Block, {
+				paddingLeft: 20,
+				paddingRight: 20,
+				paddingBottom: 20,
+				paddingTop: 20,
+				height: 200,
+				child: {
+					'Title': {
+						node: 'h1',
+						fontSize: 30
+					},
+					'Description': {
+						node: 'p',
+						marginTop: 40,
+						fontSize: 16
+					},
+					'Footer': uses(Block.Note, {
+						node: 'footer',
+						color: '#999'
+					})
+				}
+			})
+		}
+	});
+	
+	var App = React.createClass({
+		render: function() {
+			return (
+				Grid(
+					Grid.Inner(
+						this.props.items.map(function(item) {
+							return Grid.Inner.Item(
+								NewsItem([
+									NewsItem.Image({
+										src: 'http://placehold.it/200'
+									}),
+									NewsItem.Summary([
+										NewsItem.Summary.Title(item.title),
+										NewsItem.Summary.Description('A description could go here.'),
+										NewsItem.Summary.Footer('28/02/12')
+									])
+								])
+							)
+						}.bind(this))
+					)
+				)
+			);
+		}
+	
+	});
+
+	$(function() {
+		React.renderComponent(App({
+			items: [{title: 'Test 1'}, {title: 'Test 2'}]
+		}), document.getElementById('app-container'));
+		
+	});
+	</script>
+
+</body>
+</html>
